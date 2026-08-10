@@ -41,17 +41,32 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* ==========================================================
-       ESTADO
-       ========================================================== */
+    ESTADO & LOCALSTORAGE
+    ========================================================== */
+    const STORAGE_KEY = "elshaday_client_data";
+
+    // Tenta carregar dados salvos do navegador
+    const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+
     const state = {
-        clientName: null,
-        clientEmail: null,
-        clientPhone: null,
+        clientName: savedData.clientName || null,
+        clientEmail: savedData.clientEmail || null,
+        clientPhone: savedData.clientPhone || null,
         selectedService: null,
         selectedDay: null,
         selectedTime: null,
         currentAppointment: null
     };
+
+    // Função utilitária para salvar sempre que um dado for preenchido
+    function saveClientData() {
+        const dataToSave = {
+            clientName: state.clientName,
+            clientEmail: state.clientEmail,
+            clientPhone: state.clientPhone
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+    }
 
     function firstName(fullName) {
         return (fullName || "").trim().split(" ")[0];
@@ -67,6 +82,54 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function scrollToBottom() {
         window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    }
+
+    function renderIntroStep() {
+        addBotMessage("Olá, tudo bem? Sou a assistente virtual da Barbearia El Shaday e cuido do agendamento dos serviços dos profissionais, ok?");
+        setTimeout(() => {
+            addBotMessage("Qual o seu nome? Escreva seu nome e sobrenome, por favor.");
+            renderTextInputStep({
+                type: "text",
+                placeholder: "Seu nome e sobrenome",
+                onSubmit: (val) => {
+                    state.clientName = val;
+                    saveClientData(); // Salva no LocalStorage
+                    addUserMessage(val);
+                    setTimeout(renderEmailStep, 320);
+                }
+            });
+        }, 350);
+    }
+
+    function renderEmailStep() {
+        addBotMessage("Qual o seu e-mail?");
+        renderTextInputStep({
+            type: "email",
+            placeholder: "Seu e-mail",
+            validate: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
+            onSubmit: (val) => {
+                state.clientEmail = val;
+                saveClientData(); // Salva no LocalStorage
+                addUserMessage(val);
+                setTimeout(renderPhoneStep, 320);
+            }
+        });
+    }
+
+    function renderPhoneStep() {
+        addBotMessage("E o seu telefone com WhatsApp? Escreva com DDD, por favor.");
+        renderTextInputStep({
+            type: "tel",
+            placeholder: "(88) 99999-9999",
+            onSubmit: (val) => {
+                state.clientPhone = val;
+                saveClientData(); // Salva no LocalStorage
+                addUserMessage(val);
+                setTimeout(() => {
+                    askForService(`Perfeito, ${firstName(state.clientName)}! Já tenho seus dados salvos.`);
+                }, 320);
+            }
+        });
     }
 
     /* ==========================================================
@@ -525,8 +588,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function startConversation() {
-        if (state.clientName) {
-            askForService(`Como vai, ${firstName(state.clientName)}! Que bom que voltou!`);
+        // Se já tivermos o nome salvo na memória do navegador, pulamos as perguntas iniciais
+        if (state.clientName && state.clientPhone) {
+            
+            addBotMessage(`Bem-vindo(a) de volta, <strong>${firstName(state.clientName)}</strong>!`);
+            
+            const changeUserBtn = document.createElement("button");
+            changeUserBtn.className = "btn-chat btn-chat-ghost mb-3 btn-change-user";
+            changeUserBtn.style.fontSize = "0.7rem";
+            changeUserBtn.textContent = "Não sou " + firstName(state.clientName);
+            changeUserBtn.onclick = () => {
+                localStorage.removeItem(STORAGE_KEY);
+                state.clientName = null;
+                state.clientEmail = null;
+                state.clientPhone = null;
+                chatStream.innerHTML = "";
+                startConversation();
+            };
+            chatStream.appendChild(changeUserBtn);
+
+            // CORREÇÃO AQUI: Substituição do askForService por chamadas diretas
+            setTimeout(() => {
+                addBotMessage("Por qual serviço você está procurando hoje?");
+                renderServiceStep();
+            }, 400);
+
         } else {
             renderIntroStep();
         }

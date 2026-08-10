@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendamento - El-Shaday</title>
@@ -240,6 +244,18 @@
         .btn-gold { background: linear-gradient(135deg, var(--gold-1) 0%, var(--gold-2) 100%); color: #121212; }
         .btn-gold:hover { opacity: 0.92; color: #121212; }
         .btn-outline-gold { background: #fff; color: #121212; }
+        .btn-change-user {
+            align-self: center;
+            width: auto !important;
+            padding: 6px 16px !important;
+            border-radius: 999px !important;
+            margin-top: -4px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .btn-change-user:hover {
+            opacity: 1;
+        }
 
         .avatar-photo {
             width: 100%;
