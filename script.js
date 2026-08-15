@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /* ==========================================================
        DADOS MOCKADOS & CONFIGURAÇÕES
        ========================================================== */
-    const PROFESSIONAL = "Ronnye Matias";
+    const PROFESSIONAL = "Fulano";
 
     const SERVICES = [
         { id: "corte-social", title: "Corte Social", price: 25, duration: "30min", icon: "✂️" },
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function renderIntroStep() {
-        addBotMessage("Olá, tudo bem? Sou a assistente virtual da Barbearia El Shaday e cuido do agendamento dos serviços dos profissionais, ok?");
+        addBotMessage("Olá, tudo bem? Sou a assistente virtual do Barbeiro e cuido do agendamento dos serviços, ok?");
         setTimeout(() => {
             addBotMessage("Qual o seu nome? Escreva seu nome e sobrenome, por favor.");
             renderTextInputStep({
