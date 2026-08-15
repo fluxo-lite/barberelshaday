@@ -506,11 +506,11 @@ document.addEventListener("DOMContentLoaded", function () {
             `DTSTART:${fmt(start)}`, `DTEND:${fmt(end)}`,
             "END:VEVENT", "END:VCALENDAR"
         ].join("\n");
-
+        
         const blob = new Blob([ics], { type: "text/calendar" });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = "agendamento-el-shaday.ics";
+        a.download = "agendamento-o-barbeiro.ics";
         a.click();
     }
 
