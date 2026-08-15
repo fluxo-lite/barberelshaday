@@ -212,7 +212,7 @@ document.addEventListener("DOMContentLoaded", function () {
        ETAPA 0 — BOAS-VINDAS E DADOS DE CONTATO
        ========================================================== */
     function renderIntroStep() {
-        addBotMessage("Olá, tudo bem? Sou a assistente virtual do(a) Barbearia El Shaday e cuido do agendamento dos serviços dos profissionais dele(a), ok?");
+        addBotMessage("Olá, tudo bem? Sou a assistente virtual da Barbearia Fulana e cuido do agendamento dos serviços, ok?");
         setTimeout(() => {
             addBotMessage("Qual o seu nome? Escreva seu nome e sobrenome, por favor.");
             renderTextInputStep({
@@ -501,7 +501,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const ics = [
             "BEGIN:VCALENDAR", "VERSION:2.0", "BEGIN:VEVENT",
-            `SUMMARY:${s.title} - Barber Shop El-Shaday`,
+            `SUMMARY:${s.title} - Barber Shop O-Barbeiro`,
             `DESCRIPTION:Profissional: ${PROFESSIONAL}`,
             `DTSTART:${fmt(start)}`, `DTEND:${fmt(end)}`,
             "END:VEVENT", "END:VCALENDAR"
